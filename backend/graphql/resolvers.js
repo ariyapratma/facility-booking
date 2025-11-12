@@ -18,7 +18,7 @@ function isWithinOperatingHours(openingHours, date, startTime, endTime) {
   const dayName = new Date(date).toLocaleDateString("en-US", {
     weekday: "long",
   });
-  const dayEntry = openingHours.find((h) => h.dayOfWeek === dayName);
+  const dayEntry = openingHours.find((h) => h.dayofWeek === dayName);
 
   if (!dayEntry) return false;
 

@@ -10,7 +10,7 @@ const FacilitySchema = new mongoose.Schema(
     imageUrl: String,
     openingHours: [
       {
-        dayOfWeek: { type: String, required: true },
+        dayofWeek: { type: String, required: true },
         open: { type: String, required: true },
         close: { type: String, required: true },
       },
