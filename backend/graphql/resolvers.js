@@ -24,7 +24,7 @@ function isWithinOperatingHours(openingHours, date, startTime, endTime) {
 
   // Convert to minutes for easier comparison
   const toMinutes = (time) => {
-    const { hours, minutes } = time.split(":").map(Number);
+    const [hours, minutes] = time.split(":").map(Number);
     return hours * 60 + minutes;
   };
 
@@ -47,16 +47,16 @@ const resolvers = {
         query.name = { $regex: search, $options: "i" };
       }
       if (location) {
-        query.name = { $regex: location, $options: "i" };
+        query.location = { $regex: location, $options: "i" };
       }
-      if (minCapacity) {
-        query.name = { $regex: minCapacity, $options: "i" };
+      if (minCapacity !== undefined) {
+        query.capacity = { $gte: minCapacity };
       }
-      if (maxRate) {
-        query.name = { $regex: maxRate, $options: "i" };
+      if (maxRate !== undefined) {
+        query.rate = { $lte: maxRate };
       }
       if (availableDate) {
-        query.name = { $regex: availableDate, $options: "i" };
+        query.date = { $regex: availableDate, $options: "i" };
       }
       return await Facility.find(query);
     },
