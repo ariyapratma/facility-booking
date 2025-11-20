@@ -53,3 +53,36 @@ const register = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+const login = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+
+    const { email, password } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+      const isMatch = await user.matchPassword(password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Invalid credentials" });
+      }
+
+      const token = generateToken(user._id);
+      setTokenCookie(res, token);
+
+      res.status(200).json({
+        success: true,
+        message: "Login successfully",
+        data: { id: user._id, email: user.email },
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error during login" });
+    }
+  }
+};
